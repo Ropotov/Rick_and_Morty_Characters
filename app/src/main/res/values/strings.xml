@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Rick&amp;Morty</string>
+    <string name="amp"><![CDATA[&]]></string>
+    <string name="rick">Rick</string>
+    <string name="morty">Morty</string>
+    <string name="alive">Alive</string>
+    <string name="status_string_alive">Status: Alive</string>
+    <string name="name">Name</string>
+</resources>
