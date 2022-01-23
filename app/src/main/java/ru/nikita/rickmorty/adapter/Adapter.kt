@@ -13,8 +13,9 @@ import ru.nikita.rickmorty.model.Result
 
 class Adapter : RecyclerView.Adapter<Adapter.ViewHolder>() {
     private var listResponse: List<Result> = listOf()
+    var onCharacterClickListener: OnCharacterClickListener? = null
 
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view){
+    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val photo: ImageView = itemView.character_photo
     }
 
@@ -28,10 +29,16 @@ class Adapter : RecyclerView.Adapter<Adapter.ViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val pos = listResponse[position]
         with(holder) {
-            itemView.character_name.text = listResponse[position].name
-            itemView.character_status.text = "Status: " + listResponse[position].status
-            Picasso.get().load(listResponse[position].image).into(photo)
+            with(pos) {
+                itemView.character_name.text = name
+                itemView.character_status.text = "Status: " + status
+                Picasso.get().load(image).into(photo)
+                itemView.setOnClickListener {
+                    onCharacterClickListener?.onCharacterClick(this)
+                }
+            }
         }
 
     }
@@ -44,6 +51,13 @@ class Adapter : RecyclerView.Adapter<Adapter.ViewHolder>() {
     fun setList(list: List<Result>) {
         listResponse = list
         notifyDataSetChanged()
+    }
+
+    interface OnCharacterClickListener {
+        fun onCharacterClick(result: Result){
+
+        }
+
     }
 
 }
