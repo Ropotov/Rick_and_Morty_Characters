@@ -3,10 +3,12 @@
     <string name="amp"><![CDATA[&]]></string>
     <string name="rick">Rick</string>
     <string name="morty">Morty</string>
-    <string name="alive">Alive</string>
+    <string name="alive">Alive: </string>
     <string name="status_string_alive">Status: Alive</string>
     <string name="name">Name</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="status">Status: </string>
+    <string name="gender">Gender: </string>
+    <string name="species">Species: </string>
     <string name="back">Назад</string>
+
 </resources>

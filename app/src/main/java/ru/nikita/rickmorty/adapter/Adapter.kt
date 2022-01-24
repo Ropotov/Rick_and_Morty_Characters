@@ -11,8 +11,10 @@ import kotlinx.android.synthetic.main.character_item.view.*
 import ru.nikita.rickmorty.R
 import ru.nikita.rickmorty.model.Result
 
+var idCharacter: Int = 0
+
 class Adapter : RecyclerView.Adapter<Adapter.ViewHolder>() {
-    var idCharacter: Int? = null
+
     private var listResponse: List<Result> = listOf()
     var onCharacterClickListener: OnCharacterClickListener? = null
 
