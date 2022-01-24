@@ -7,12 +7,10 @@ import androidx.fragment.app.FragmentTransaction
 
 class MainActivity : AppCompatActivity() {
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         fragmentReplace(CharacterFragment())
-
     }
 
     fun fragmentReplace(fragment: Fragment) {
@@ -21,9 +19,6 @@ class MainActivity : AppCompatActivity() {
             .replace(R.id.container, fragment)
             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
             .commit()
-    }
-    fun setDescription(id: Int){
-        fragmentReplace(DetailFragment())
     }
 
 }

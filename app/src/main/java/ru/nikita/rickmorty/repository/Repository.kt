@@ -9,4 +9,7 @@ class Repository {
     suspend fun getCharacter(): Response<Character>{
         return RetrofitInstance.api.getCharacters()
     }
+    suspend fun getDetailCharacter(): Response<Character>{
+        return RetrofitInstance.api.getDetailCharacter(1)
+    }
 }

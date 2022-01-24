@@ -12,6 +12,7 @@ import ru.nikita.rickmorty.R
 import ru.nikita.rickmorty.model.Result
 
 class Adapter : RecyclerView.Adapter<Adapter.ViewHolder>() {
+    var idCharacter: Int? = null
     private var listResponse: List<Result> = listOf()
     var onCharacterClickListener: OnCharacterClickListener? = null
 
@@ -37,6 +38,7 @@ class Adapter : RecyclerView.Adapter<Adapter.ViewHolder>() {
                 Picasso.get().load(image).into(photo)
                 itemView.setOnClickListener {
                     onCharacterClickListener?.onCharacterClick(this)
+                    idCharacter = id
                 }
             }
         }

@@ -17,4 +17,9 @@ class MyViewModel: ViewModel() {
             myCharacterList.value = repo.getCharacter()
         }
     }
+    fun getDetailCharacters(){
+        viewModelScope.launch {
+            myCharacterList.value = repo.getDetailCharacter()
+        }
+    }
 }
