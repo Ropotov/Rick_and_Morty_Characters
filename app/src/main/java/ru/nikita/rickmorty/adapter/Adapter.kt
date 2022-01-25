@@ -37,6 +37,12 @@ class Adapter : RecyclerView.Adapter<Adapter.ViewHolder>() {
             with(pos) {
                 itemView.character_name.text = name
                 itemView.character_status.text = "Status: " + status
+                when(status){
+                    "Alive" -> itemView.status_tv.setImageResource(R.drawable.green_ind)
+                    "Dead" -> itemView.status_tv.setBackgroundResource(R.drawable.red_ind)
+                    "unknown" -> itemView.status_tv.setBackgroundResource(R.drawable.gray_ind)
+
+                }
                 Picasso.get().load(image).into(photo)
                 itemView.setOnClickListener {
                     onCharacterClickListener?.onCharacterClick(this)
