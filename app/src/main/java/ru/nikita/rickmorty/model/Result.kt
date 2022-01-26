@@ -7,7 +7,7 @@ data class Result(
     var id: Int,
     var image: String,
     var location: Location,
-    var name: String,
+    var name: String = "",
     var origin: Origin,
     var species: String,
     var status: String,
