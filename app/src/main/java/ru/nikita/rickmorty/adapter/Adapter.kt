@@ -2,15 +2,13 @@ package ru.nikita.rickmorty.adapter
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
-import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.character_item.view.*
 import ru.nikita.rickmorty.R
+import ru.nikita.rickmorty.databinding.CharacterItemBinding
 import ru.nikita.rickmorty.model.Result
 import java.util.*
 import kotlin.collections.ArrayList
@@ -29,41 +27,39 @@ class Adapter(private var listResponse: ArrayList<Result>) :
 
     var onCharacterClickListener: OnCharacterClickListener? = null
 
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val photo: ImageView = itemView.character_photo
+    class ViewHolder(private val binding: CharacterItemBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun bind(pos: Result) {
+            with(binding) {
+                characterName.text = pos.name
+                characterStatus.text = pos.status
+                when (characterStatus.text) {
+                    "Alive" -> binding.statusTv.setImageResource(R.drawable.green_ind)
+                    "Dead" -> binding.statusTv.setBackgroundResource(R.drawable.red_ind)
+                    "unknown" -> binding.statusTv.setBackgroundResource(R.drawable.gray_ind)
+                }
+                Picasso.get().load(pos.image).into(binding.characterPhoto)
+            }
+        }
     }
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view =
-            LayoutInflater.from(parent.context)
-                .inflate(R.layout.character_item, parent, false)
-        return ViewHolder(view)
-
+        val binding = CharacterItemBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false
+        )
+        return ViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val pos = listFilterResponse[position]
-        with(holder) {
-            with(pos) {
-                itemView.character_name.text = name
-                itemView.character_status.text = "Status: " + status
-                when (status) {
-                    "Alive" -> itemView.status_tv.setImageResource(R.drawable.green_ind)
-                    "Dead" -> itemView.status_tv.setBackgroundResource(R.drawable.red_ind)
-                    "unknown" -> itemView.status_tv.setBackgroundResource(R.drawable.gray_ind)
-
-                }
-                Picasso.get().load(image).into(photo)
-                itemView.setOnClickListener {
-                    onCharacterClickListener?.onCharacterClick(this)
-                    idCharacter = id
-                }
-            }
+        holder.bind(pos)
+        holder.itemView.setOnClickListener {
+            onCharacterClickListener?.onCharacterClick(pos)
+            idCharacter = pos.id
         }
-
     }
-
     override fun getItemCount(): Int {
         return listFilterResponse.size
     }
@@ -78,7 +74,6 @@ class Adapter(private var listResponse: ArrayList<Result>) :
         fun onCharacterClick(result: Result) {
 
         }
-
     }
 
     override fun getFilter(): Filter {
@@ -90,7 +85,7 @@ class Adapter(private var listResponse: ArrayList<Result>) :
                 } else {
                     val resultList = ArrayList<Result>()
                     for (row in listResponse) {
-                        if (row.name.lowercase(Locale.ROOT)
+                        if (row.status.lowercase(Locale.ROOT)
                                 .contains(charSearch.lowercase(Locale.ROOT))
                         ) {
                             resultList.add(row)

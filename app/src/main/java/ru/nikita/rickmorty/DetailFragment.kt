@@ -8,10 +8,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.fragment_detail.*
+import ru.nikita.rickmorty.databinding.FragmentDetailBinding
 import ru.nikita.rickmorty.viewModel.MyViewModel
 
 class DetailFragment : Fragment() {
+
+    private lateinit var binding: FragmentDetailBinding
 
     @SuppressLint("SetTextI18n")
     override fun onCreateView(
@@ -19,28 +21,28 @@ class DetailFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        val v: View = inflater.inflate(R.layout.fragment_detail, container, false)
+        binding = FragmentDetailBinding.inflate(inflater, container, false)
+        val view = binding.root
+
         val viewModel = ViewModelProvider(this)[MyViewModel::class.java]
         viewModel.getDetailCharacters()
         viewModel.myDetailList.observe(viewLifecycleOwner, { response ->
             response.body()?.let {
-                detail_name.text = it.name
-                detail_gender.text = "Gender: " + it.gender
-                detail_status.text = "Status: " + it.status
-                detail_species.text = "Species: " + it.species
-                Picasso.get().load(it.image).into(detail_photo)
+                binding.detailName.text = it.name
+                binding.detailGender.text = "Gender: " + it.gender
+                binding.detailStatus.text = "Status: " + it.status
+                binding.detailSpecies.text = "Species: " + it.species
+                Picasso.get().load(it.image).into(binding.detailPhoto)
             }
         })
-        return v
-
+        return view
     }
 
     override fun onStart() {
         super.onStart()
-        detail_back.setOnClickListener {
+        binding.detailBack.setOnClickListener {
             val ma = (activity as MainActivity)
             ma.fragmentReplace(CharacterFragment())
         }
     }
-
 }
