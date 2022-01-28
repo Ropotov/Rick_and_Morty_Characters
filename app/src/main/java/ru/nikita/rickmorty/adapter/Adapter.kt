@@ -3,6 +3,7 @@ package ru.nikita.rickmorty.adapter
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.Filter
 import android.widget.Filterable
 import androidx.recyclerview.widget.RecyclerView
@@ -85,7 +86,7 @@ class Adapter(private var listResponse: ArrayList<Result>) :
                 } else {
                     val resultList = ArrayList<Result>()
                     for (row in listResponse) {
-                        if (row.status.lowercase(Locale.ROOT)
+                        if (row.name.lowercase(Locale.ROOT)
                                 .contains(charSearch.lowercase(Locale.ROOT))
                         ) {
                             resultList.add(row)
@@ -102,8 +103,7 @@ class Adapter(private var listResponse: ArrayList<Result>) :
             @SuppressLint("NotifyDataSetChanged")
             @Suppress("UNCHECKED_CAST")
             override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
-                listFilterResponse.clear()
-                listFilterResponse.addAll(results?.values as ArrayList<Result>)
+                listFilterResponse = results?.values as ArrayList<Result>
                 notifyDataSetChanged()
 
             }

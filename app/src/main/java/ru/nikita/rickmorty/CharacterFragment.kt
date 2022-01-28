@@ -16,6 +16,7 @@ import ru.nikita.rickmorty.model.Result
 import ru.nikita.rickmorty.viewModel.MyViewModel
 
 class CharacterFragment : Fragment() {
+
     private lateinit var binding: FragmentCharacterBinding
     private var responseList = arrayListOf<Result>()
     lateinit var recyclerView: RecyclerView
@@ -44,7 +45,7 @@ class CharacterFragment : Fragment() {
         recyclerView.adapter = adapter
         viewModel.getMyCharacters()
         viewModel.myCharacterList.observe(viewLifecycleOwner, { response ->
-            response.body()?.results?.let { adapter.setList(it as ArrayList<Result>) }
+            response.body()?.results?.let { updateAdapterList(it) }
         })
         binding.svFilter.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
@@ -58,11 +59,19 @@ class CharacterFragment : Fragment() {
         })
         binding.swipe.setOnRefreshListener {
             viewModel.myCharacterList.observe(viewLifecycleOwner, { response ->
-                response.body()?.results?.let { adapter.setList(it as ArrayList<Result>) }
+                response.body()?.results?.let { updateAdapterList(it) }
             })
             binding.swipe.isRefreshing = false
         }
         return view
+
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private fun updateAdapterList(list: List<Result>) {
+        responseList.clear()
+        responseList.addAll(list)
+        adapter.notifyDataSetChanged()
 
     }
 
