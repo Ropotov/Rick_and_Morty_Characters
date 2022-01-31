@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ru.nikita.rickmorty.adapter.Adapter
@@ -72,8 +73,8 @@ class CharacterFragment : Fragment() {
         responseList.clear()
         responseList.addAll(list)
         adapter.notifyDataSetChanged()
-
     }
+
 
 }
 

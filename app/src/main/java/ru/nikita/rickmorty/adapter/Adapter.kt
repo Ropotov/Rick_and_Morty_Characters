@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Filter
 import android.widget.Filterable
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import ru.nikita.rickmorty.R
@@ -34,7 +35,7 @@ class Adapter(private var listResponse: ArrayList<Result>) :
             with(binding) {
                 characterName.text = pos.name
                 characterStatus.text = pos.status
-                when (characterStatus.text) {
+                when (pos.status) {
                     "Alive" -> binding.statusTv.setImageResource(R.drawable.green_ind)
                     "Dead" -> binding.statusTv.setBackgroundResource(R.drawable.red_ind)
                     "unknown" -> binding.statusTv.setBackgroundResource(R.drawable.gray_ind)
@@ -65,11 +66,6 @@ class Adapter(private var listResponse: ArrayList<Result>) :
         return listFilterResponse.size
     }
 
-    @SuppressLint("NotifyDataSetChanged")
-    fun setList(list: ArrayList<Result>) {
-        listFilterResponse = list
-        notifyDataSetChanged()
-    }
 
     interface OnCharacterClickListener {
         fun onCharacterClick(result: Result) {
@@ -104,7 +100,6 @@ class Adapter(private var listResponse: ArrayList<Result>) :
             @Suppress("UNCHECKED_CAST")
             override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
                 listFilterResponse = results?.values as ArrayList<Result>
-                notifyDataSetChanged()
 
             }
         }
