@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import ru.nikita.rickmorty.R
 import ru.nikita.rickmorty.databinding.CharacterItemBinding
+import ru.nikita.rickmorty.model.Info
 import ru.nikita.rickmorty.model.Result
 import java.util.*
 import kotlin.collections.ArrayList

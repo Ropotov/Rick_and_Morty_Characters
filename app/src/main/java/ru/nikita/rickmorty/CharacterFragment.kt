@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ru.nikita.rickmorty.adapter.Adapter
@@ -31,42 +30,43 @@ class CharacterFragment : Fragment() {
     ): View? {
         binding = FragmentCharacterBinding.inflate(inflater, container, false)
         val view = binding.root
-        val viewModel = ViewModelProvider(this)[MyViewModel::class.java]
-        recyclerView = binding.rvCharacters
-        adapter = Adapter(responseList)
-        adapter.onCharacterClickListener = object : Adapter.OnCharacterClickListener {
-            override fun onCharacterClick(result: Result) {
-                super.onCharacterClick(result)
-                val ma = (activity as MainActivity)
-                ma.fragmentReplace(DetailFragment())
-            }
+            val viewModel = ViewModelProvider(this)[MyViewModel::class.java]
+            recyclerView = binding.rvCharacters
+            adapter = Adapter(responseList)
+            adapter.onCharacterClickListener = object : Adapter.OnCharacterClickListener {
+                override fun onCharacterClick(result: Result) {
+                    super.onCharacterClick(result)
+                    val ma = (activity as MainActivity)
+                    ma.fragmentReplace(DetailFragment())
+                }
 
-        }
-        recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
-        recyclerView.adapter = adapter
-        viewModel.getMyCharacters()
-        viewModel.myCharacterList.observe(viewLifecycleOwner, { response ->
-            response.body()?.results?.let { updateAdapterList(it) }
-        })
-        binding.svFilter.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                return false
             }
-
-            override fun onQueryTextChange(newText: String?): Boolean {
-                adapter.filter.filter(newText)
-                return false
-            }
-        })
-        binding.swipe.setOnRefreshListener {
+            recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
+            recyclerView.adapter = adapter
+            viewModel.getMyCharacters()
             viewModel.myCharacterList.observe(viewLifecycleOwner, { response ->
                 response.body()?.results?.let { updateAdapterList(it) }
             })
-            binding.swipe.isRefreshing = false
-        }
-        return view
+            binding.svFilter.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    return false
+                }
 
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    adapter.filter.filter(newText)
+                    return false
+                }
+            })
+            binding.swipe.setOnRefreshListener {
+                viewModel.myCharacterList.observe(viewLifecycleOwner, { response ->
+                    response.body()?.results?.let { updateAdapterList(it) }
+                })
+                binding.swipe.isRefreshing = false
+            }
+        return view
     }
+
+
 
     @SuppressLint("NotifyDataSetChanged")
     private fun updateAdapterList(list: List<Result>) {

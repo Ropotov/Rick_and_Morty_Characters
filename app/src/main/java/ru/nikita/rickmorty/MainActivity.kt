@@ -1,5 +1,6 @@
 package ru.nikita.rickmorty
 
+import android.content.res.Configuration
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -14,9 +15,11 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.RickMorty)
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        fragmentReplace(CharacterFragment())
+            binding = ActivityMainBinding.inflate(layoutInflater)
+            setContentView(binding.root)
+        if (savedInstanceState == null) {
+            fragmentReplace(CharacterFragment())
+        }
     }
 
     fun fragmentReplace(fragment: Fragment) {
@@ -26,5 +29,7 @@ class MainActivity : AppCompatActivity() {
             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
             .commit()
     }
+
+
 
 }
