@@ -18,18 +18,19 @@ class MainActivity : AppCompatActivity() {
             binding = ActivityMainBinding.inflate(layoutInflater)
             setContentView(binding.root)
         if (savedInstanceState == null) {
-            fragmentReplace(CharacterFragment())
+            supportFragmentManager
+                .beginTransaction()
+                .add(R.id.container, CharacterFragment())
+                .commit()
         }
     }
 
     fun fragmentReplace(fragment: Fragment) {
         supportFragmentManager
             .beginTransaction()
-            .replace(R.id.container, fragment)
+            .add(R.id.container, fragment)
             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+            .addToBackStack(null)
             .commit()
     }
-
-
-
 }

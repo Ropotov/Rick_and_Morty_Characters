@@ -101,7 +101,7 @@ class Adapter(private var listResponse: ArrayList<Result>) :
             @Suppress("UNCHECKED_CAST")
             override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
                 listFilterResponse = results?.values as ArrayList<Result>
-
+                notifyDataSetChanged()
             }
         }
     }
