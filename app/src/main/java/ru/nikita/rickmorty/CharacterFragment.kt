@@ -21,13 +21,14 @@ class CharacterFragment : Fragment() {
     private var responseList = arrayListOf<Result>()
     lateinit var recyclerView: RecyclerView
     lateinit var adapter: Adapter
+    private var page = 1
 
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentCharacterBinding.inflate(inflater, container, false)
         val view = binding.root
             val viewModel = ViewModelProvider(this)[MyViewModel::class.java]
@@ -43,7 +44,7 @@ class CharacterFragment : Fragment() {
             }
             recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
             recyclerView.adapter = adapter
-            viewModel.getMyCharacters()
+            viewModel.getMyCharacters(page)
             viewModel.myCharacterList.observe(viewLifecycleOwner, { response ->
                 response.body()?.results?.let { updateAdapterList(it) }
             })
@@ -57,6 +58,19 @@ class CharacterFragment : Fragment() {
                     return false
                 }
             })
+        recyclerView.addOnScrollListener(
+            object : RecyclerView.OnScrollListener(){
+                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                    if (!recyclerView.canScrollVertically(1)){
+                        viewModel.searchNextPage()
+                        viewModel.myCharacterList.observe(viewLifecycleOwner, {
+                                responseList.let{ responseList.addAll(it)}
+                        })
+                        viewModel.pageNumber++
+                    }
+                }
+            }
+        )
             binding.swipe.setOnRefreshListener {
                 viewModel.myCharacterList.observe(viewLifecycleOwner, { response ->
                     response.body()?.results?.let { updateAdapterList(it) }
@@ -66,8 +80,6 @@ class CharacterFragment : Fragment() {
         return view
     }
 
-
-
     @SuppressLint("NotifyDataSetChanged")
     private fun updateAdapterList(list: List<Result>) {
         responseList.clear()
@@ -75,6 +87,4 @@ class CharacterFragment : Fragment() {
         adapter.notifyDataSetChanged()
     }
 
-
 }
-

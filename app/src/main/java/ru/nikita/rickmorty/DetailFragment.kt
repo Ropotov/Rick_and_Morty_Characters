@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
 import com.squareup.picasso.Picasso
 import ru.nikita.rickmorty.databinding.FragmentDetailBinding
@@ -19,7 +20,7 @@ class DetailFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         binding = FragmentDetailBinding.inflate(inflater, container, false)
         val view = binding.root
@@ -42,7 +43,10 @@ class DetailFragment : Fragment() {
         super.onStart()
         binding.detailBack.setOnClickListener {
             val ma = (activity as MainActivity)
-            ma.fragmentReplace(CharacterFragment())
+            ma.supportFragmentManager
+                .popBackStack()
+
+
         }
     }
 }
