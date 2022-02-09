@@ -12,35 +12,30 @@ import ru.nikita.rickmorty.model.Character
 import ru.nikita.rickmorty.model.DetailCharacter
 import ru.nikita.rickmorty.repository.Repository
 
-class MyViewModel: ViewModel() {
+class MyViewModel : ViewModel() {
     var repo = Repository()
     var myCharacterList: MutableLiveData<Response<Character>> = MutableLiveData()
+    var myCurrentList: MutableLiveData<Response<Character>> = MutableLiveData()
     var myDetailList: MutableLiveData<Response<DetailCharacter>> = MutableLiveData()
     private var isQueryAvailable = MutableLiveData<Boolean>()
-    var pageNumber: Int = 1
 
-    fun getMyCharacters(page: Int){
+    fun getMyCharacters(page: Int) {
         viewModelScope.launch {
             isQueryAvailable.value = false
-            pageNumber = page
-            myCharacterList.value = repo.getCharacter(pageNumber)
+            myCharacterList.value = repo.getCharacter(page)
         }
     }
-    fun getDetailCharacters(){
+
+    fun getDetailCharacters() {
         viewModelScope.launch {
             myDetailList.value = repo.getDetailCharacter()
         }
     }
-    fun searchNextPage(){
-        if (!isQueryAvailable().value!!){
-            viewModelScope.launch {
-                pageNumber+=1
-                myCharacterList.value = repo.getCharacter(pageNumber)
-            }
+
+    fun searchNextPage(page: Int) {
+        viewModelScope.launch {
+            if (page != 50) myCurrentList.value = repo.getCharacter(page)
         }
     }
-    private fun isQueryAvailable(): LiveData<Boolean> {
-        if(pageNumber == 50 ) isQueryAvailable.value = true
-        return isQueryAvailable
-    }
 }
+

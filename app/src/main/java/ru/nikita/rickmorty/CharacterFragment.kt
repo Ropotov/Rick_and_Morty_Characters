@@ -19,6 +19,7 @@ class CharacterFragment : Fragment() {
 
     private lateinit var binding: FragmentCharacterBinding
     private var responseList = arrayListOf<Result>()
+    private var currentList = arrayListOf<Result>()
     lateinit var recyclerView: RecyclerView
     lateinit var adapter: Adapter
     private var page = 1
@@ -31,59 +32,62 @@ class CharacterFragment : Fragment() {
     ): View {
         binding = FragmentCharacterBinding.inflate(inflater, container, false)
         val view = binding.root
-            val viewModel = ViewModelProvider(this)[MyViewModel::class.java]
-            recyclerView = binding.rvCharacters
-            adapter = Adapter(responseList)
-            adapter.onCharacterClickListener = object : Adapter.OnCharacterClickListener {
-                override fun onCharacterClick(result: Result) {
-                    super.onCharacterClick(result)
-                    val ma = (activity as MainActivity)
-                    ma.fragmentReplace(DetailFragment())
-                }
-
+        val viewModel = ViewModelProvider(this)[MyViewModel::class.java]
+        recyclerView = binding.rvCharacters
+        adapter = Adapter(responseList)
+        adapter.onCharacterClickListener = object : Adapter.OnCharacterClickListener {
+            override fun onCharacterClick(result: Result) {
+                super.onCharacterClick(result)
+                val ma = (activity as MainActivity)
+                ma.fragmentReplace(DetailFragment())
             }
-            recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
-            recyclerView.adapter = adapter
-            viewModel.getMyCharacters(page)
-            viewModel.myCharacterList.observe(viewLifecycleOwner, { response ->
-                response.body()?.results?.let { updateAdapterList(it) }
-            })
-            binding.svFilter.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-                override fun onQueryTextSubmit(query: String?): Boolean {
-                    return false
-                }
 
-                override fun onQueryTextChange(newText: String?): Boolean {
-                    adapter.filter.filter(newText)
-                    return false
-                }
-            })
+        }
+        recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
+        recyclerView.adapter = adapter
+        viewModel.getMyCharacters(page)
+        viewModel.myCharacterList.observe(viewLifecycleOwner, { response ->
+            response.body()?.results?.let { updateAdapterList(it) }
+        })
+        page = 2
+        binding.svFilter.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                adapter.filter.filter(newText)
+                return false
+            }
+        })
         recyclerView.addOnScrollListener(
-            object : RecyclerView.OnScrollListener(){
+            object : RecyclerView.OnScrollListener() {
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                    if (!recyclerView.canScrollVertically(1)){
-                        viewModel.searchNextPage()
-                        viewModel.myCharacterList.observe(viewLifecycleOwner, {
-                                responseList.let{ responseList.addAll(it)}
+                    if (!recyclerView.canScrollVertically(1) && newState == RecyclerView.SCROLL_STATE_IDLE) {
+                        viewModel.searchNextPage(page)
+                        page++
+                        viewModel.myCurrentList.observe(viewLifecycleOwner, { response ->
+                            response.body()?.results?.let { updateAdapterList(it) }
+
                         })
-                        viewModel.pageNumber++
                     }
                 }
             }
         )
-            binding.swipe.setOnRefreshListener {
-                viewModel.myCharacterList.observe(viewLifecycleOwner, { response ->
-                    response.body()?.results?.let { updateAdapterList(it) }
-                })
-                binding.swipe.isRefreshing = false
-            }
+        binding.swipe.setOnRefreshListener {
+            viewModel.myCharacterList.observe(viewLifecycleOwner, { response ->
+                response.body()?.results?.let { updateAdapterList(it) }
+            })
+            binding.swipe.isRefreshing = false
+        }
         return view
     }
 
     @SuppressLint("NotifyDataSetChanged")
     private fun updateAdapterList(list: List<Result>) {
-        responseList.clear()
-        responseList.addAll(list)
+        currentList.clear()
+        currentList.addAll(list)
+        responseList.addAll(currentList)
         adapter.notifyDataSetChanged()
     }
 
