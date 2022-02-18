@@ -10,7 +10,10 @@ import ru.nikita.rickmorty.model.DetailCharacter
 
 interface ApiService {
     @GET("character/")
-    suspend fun getCharacters(@Query("page") page: String): Response<Character>
+    suspend fun getCharacters(
+        @Query("page") page: String,
+        @Query("name") name: String?
+    ): Response<Character>
 
     @GET("character/{id}")
     suspend fun getDetailCharacter(@Path("id") id:Int): Response<DetailCharacter>

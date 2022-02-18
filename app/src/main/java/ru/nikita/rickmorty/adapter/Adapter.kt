@@ -1,6 +1,7 @@
 package ru.nikita.rickmorty.adapter
 
 import android.annotation.SuppressLint
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
@@ -9,6 +10,7 @@ import android.widget.Filterable
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
+import ru.nikita.rickmorty.CharacterStatusEnums
 import ru.nikita.rickmorty.R
 import ru.nikita.rickmorty.databinding.CharacterItemBinding
 import ru.nikita.rickmorty.model.Info
@@ -17,6 +19,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 var idCharacter: Int = 0
+
 
 class Adapter(private var listResponse: ArrayList<Result>) :
     RecyclerView.Adapter<Adapter.ViewHolder>(),
@@ -37,9 +40,13 @@ class Adapter(private var listResponse: ArrayList<Result>) :
                 characterName.text = pos.name
                 characterStatus.text = pos.status
                 when (pos.status) {
-                    "Alive" -> binding.statusTv.setImageResource(R.drawable.green_ind)
-                    "Dead" -> binding.statusTv.setBackgroundResource(R.drawable.red_ind)
-                    "unknown" -> binding.statusTv.setBackgroundResource(R.drawable.gray_ind)
+                    CharacterStatusEnums.CHARACTER_ALIVE.value ->
+                        binding.statusTv.setBackgroundColor(Color.parseColor("#14D91B"))
+                    CharacterStatusEnums.CHARACTER_DEAD.value ->
+                        binding.statusTv.setBackgroundColor(Color.parseColor("#FF0800"))
+                    CharacterStatusEnums.CHARACTER_UNKNOWN.value ->
+                        binding.statusTv.setBackgroundColor(Color.parseColor("#E3E3E3"))
+                    else -> binding.statusTv.setBackgroundColor(Color.parseColor("#F8F816"))
                 }
                 Picasso.get().load(pos.image).into(binding.characterPhoto)
             }

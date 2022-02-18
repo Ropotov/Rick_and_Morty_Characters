@@ -2,6 +2,7 @@ package ru.nikita.rickmorty
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,7 +23,6 @@ class CharacterFragment : Fragment() {
     private var currentList = arrayListOf<Result>()
     lateinit var recyclerView: RecyclerView
     lateinit var adapter: Adapter
-    private var page = 1
 
 
     @SuppressLint("NotifyDataSetChanged")
@@ -45,13 +45,13 @@ class CharacterFragment : Fragment() {
         }
         recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
         recyclerView.adapter = adapter
-        viewModel.getMyCharacters(page)
+        viewModel.getMyCharacters(1, "")
         viewModel.myCharacterList.observe(viewLifecycleOwner, { response ->
             response.body()?.results?.let { updateAdapterList(it) }
         })
-        page = 2
         binding.svFilter.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
+                viewModel.getMyCharacters(1, query)
                 return false
             }
 
@@ -64,8 +64,7 @@ class CharacterFragment : Fragment() {
             object : RecyclerView.OnScrollListener() {
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                     if (!recyclerView.canScrollVertically(1) && newState == RecyclerView.SCROLL_STATE_IDLE) {
-                        viewModel.searchNextPage(page)
-                        page++
+                        viewModel.searchNextPage()
                         viewModel.myCurrentList.observe(viewLifecycleOwner, { response ->
                             response.body()?.results?.let { updateAdapterList(it) }
 

@@ -11,6 +11,9 @@ import retrofit2.Response
 import ru.nikita.rickmorty.model.Character
 import ru.nikita.rickmorty.model.DetailCharacter
 import ru.nikita.rickmorty.repository.Repository
+private var pageNumber: Int = 1
+private var queryName: String? = ""
+
 
 class MyViewModel : ViewModel() {
     var repo = Repository()
@@ -19,10 +22,12 @@ class MyViewModel : ViewModel() {
     var myDetailList: MutableLiveData<Response<DetailCharacter>> = MutableLiveData()
     private var isQueryAvailable = MutableLiveData<Boolean>()
 
-    fun getMyCharacters(page: Int) {
+    fun getMyCharacters(page: Int, name: String?) {
+        pageNumber = page
+        queryName = name
         viewModelScope.launch {
             isQueryAvailable.value = false
-            myCharacterList.value = repo.getCharacter(page)
+            myCharacterList.value = repo.getCharacter(page, queryName)
         }
     }
 
@@ -32,9 +37,11 @@ class MyViewModel : ViewModel() {
         }
     }
 
-    fun searchNextPage(page: Int) {
+    fun searchNextPage() {
         viewModelScope.launch {
-            if (page != 50) myCurrentList.value = repo.getCharacter(page)
+            if (pageNumber != 50){
+                getMyCharacters(pageNumber+1, queryName)
+            }
         }
     }
 }

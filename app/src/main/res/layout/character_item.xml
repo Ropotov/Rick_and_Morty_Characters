@@ -30,35 +30,32 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:orientation="vertical"
                 android:padding="7dp">
 
-                <ImageView
+                <Button
                     android:id="@+id/status_tv"
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"
+                    style="@style/btnStyle"
+                    android:layout_width="40dp"
+                    android:layout_height="7dp"
                     android:layout_gravity="center"
-                    android:layout_marginStart="5dp"
                     tools:srcCompat="@android:drawable/presence_invisible" />
 
-                <LinearLayout
+                <TextView
+                    android:id="@+id/character_name"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_gravity="center"
-                    android:layout_margin="10dp">
-
-                    <TextView
-                        android:id="@+id/character_name"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:fontFamily="@font/architects_daughter"
-                        android:gravity="center_vertical"
-                        android:textStyle="bold"
-                        app:autoSizeMaxTextSize="30sp"
-                        app:autoSizeMinTextSize="16sp"
-                        app:autoSizeStepGranularity="1sp"
-                        app:autoSizeTextType="uniform" />
-
-                </LinearLayout>
+                    android:layout_height="40dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginStart="7dp"
+                    android:layout_marginEnd="7dp"
+                    android:layout_marginTop="2dp"
+                    android:fontFamily="@font/architects_daughter"
+                    android:gravity="center"
+                    android:textStyle="bold"
+                    app:autoSizeMaxTextSize="30sp"
+                    app:autoSizeMinTextSize="16sp"
+                    app:autoSizeStepGranularity="1sp"
+                    app:autoSizeTextType="uniform" />
 
 
             </LinearLayout>
@@ -73,12 +70,12 @@
                 android:text="@string/status_string_alive"
                 android:textSize="18sp"
                 android:visibility="gone" />
+
             <TextView
                 android:id="@+id/next_page"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
-                />
+                android:visibility="gone" />
 
         </LinearLayout>
 
