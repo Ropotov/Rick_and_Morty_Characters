@@ -8,10 +8,13 @@ import ru.nikita.rickmorty.model.DetailCharacter
 
 class Repository {
 
-    suspend fun getCharacter(page: Int, name: String?): Response<Character>{
-        return RetrofitInstance.api.getCharacters(page.toString(),name)
+    suspend fun getCharacter(page: Int): Response<Character>{
+        return RetrofitInstance.api.getCharacters(page)
     }
     suspend fun getDetailCharacter(): Response<DetailCharacter>{
         return RetrofitInstance.api.getDetailCharacter(idCharacter)
+    }
+    suspend fun getFilteredCharacter(filter: String): Response<Character>{
+        return RetrofitInstance.api.getFilterCharacters(filter)
     }
 }

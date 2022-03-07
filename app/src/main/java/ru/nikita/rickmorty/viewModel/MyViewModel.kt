@@ -1,6 +1,7 @@
 package ru.nikita.rickmorty.viewModel
 
-import androidx.lifecycle.LiveData
+import android.annotation.SuppressLint
+import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,9 +12,10 @@ import retrofit2.Response
 import ru.nikita.rickmorty.model.Character
 import ru.nikita.rickmorty.model.DetailCharacter
 import ru.nikita.rickmorty.repository.Repository
-private var pageNumber: Int = 1
-private var queryName: String? = ""
+import kotlin.contracts.contract
 
+private var pageNumber: Int = 1
+private var filter: String = ""
 
 class MyViewModel : ViewModel() {
     var repo = Repository()
@@ -22,12 +24,14 @@ class MyViewModel : ViewModel() {
     var myDetailList: MutableLiveData<Response<DetailCharacter>> = MutableLiveData()
     private var isQueryAvailable = MutableLiveData<Boolean>()
 
-    fun getMyCharacters(page: Int, name: String?) {
+    fun getMyCharacters(page: Int) {
         pageNumber = page
-        queryName = name
+        isQueryAvailable.value = false
         viewModelScope.launch {
-            isQueryAvailable.value = false
-            myCharacterList.value = repo.getCharacter(page, queryName)
+            val result = withContext(Dispatchers.IO) {
+                kotlin.runCatching { repo.getCharacter(page) }
+            }
+            result.onSuccess { myCharacterList.value = it }
         }
     }
 
@@ -36,13 +40,19 @@ class MyViewModel : ViewModel() {
             myDetailList.value = repo.getDetailCharacter()
         }
     }
+    fun getFilterCharacters(query: String?) {
+        viewModelScope.launch {
+            myCharacterList.value = repo.getFilteredCharacter(filter)
+        }
+    }
 
     fun searchNextPage() {
         viewModelScope.launch {
-            if (pageNumber != 50){
-                getMyCharacters(pageNumber+1, queryName)
+            if (pageNumber != 52){
+                getMyCharacters(pageNumber+1)
             }
         }
     }
 }
+
 

@@ -41,11 +41,12 @@ class Adapter(private var listResponse: ArrayList<Result>) :
                 characterStatus.text = pos.status
                 when (pos.status) {
                     CharacterStatusEnums.CHARACTER_ALIVE.value ->
-                        binding.statusTv.setBackgroundColor(Color.parseColor("#14D91B"))
+                        binding.statusTv.setBackgroundColor(Color.parseColor("#02B31A"))
                     CharacterStatusEnums.CHARACTER_DEAD.value ->
                         binding.statusTv.setBackgroundColor(Color.parseColor("#FF0800"))
                     CharacterStatusEnums.CHARACTER_UNKNOWN.value ->
                         binding.statusTv.setBackgroundColor(Color.parseColor("#E3E3E3"))
+
                     else -> binding.statusTv.setBackgroundColor(Color.parseColor("#F8F816"))
                 }
                 Picasso.get().load(pos.image).into(binding.characterPhoto)

@@ -1,6 +1,5 @@
 package ru.nikita.rickmorty.api
 
-import androidx.annotation.IntRange
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -10,11 +9,11 @@ import ru.nikita.rickmorty.model.DetailCharacter
 
 interface ApiService {
     @GET("character/")
-    suspend fun getCharacters(
-        @Query("page") page: String,
-        @Query("name") name: String?
-    ): Response<Character>
+    suspend fun getCharacters(@Query ("page") page: Int): Response<Character>
 
     @GET("character/{id}")
-    suspend fun getDetailCharacter(@Path("id") id:Int): Response<DetailCharacter>
+    suspend fun getDetailCharacter(@Path("id") id: Int): Response<DetailCharacter>
+
+    @GET("character/")
+    suspend fun getFilterCharacters(@Query("filter") filter: String): Response<Character>
 }

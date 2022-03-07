@@ -2,7 +2,6 @@ package ru.nikita.rickmorty
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -45,13 +44,13 @@ class CharacterFragment : Fragment() {
         }
         recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
         recyclerView.adapter = adapter
-        viewModel.getMyCharacters(1, "")
+        viewModel.getMyCharacters(1)
         viewModel.myCharacterList.observe(viewLifecycleOwner, { response ->
             response.body()?.results?.let { updateAdapterList(it) }
         })
         binding.svFilter.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                viewModel.getMyCharacters(1, query)
+                viewModel.getFilterCharacters(query)
                 return false
             }
 
