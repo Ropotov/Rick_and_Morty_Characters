@@ -4,16 +4,12 @@ import android.annotation.SuppressLint
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import android.widget.Filter
 import android.widget.Filterable
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import ru.nikita.rickmorty.CharacterStatusEnums
-import ru.nikita.rickmorty.R
 import ru.nikita.rickmorty.databinding.CharacterItemBinding
-import ru.nikita.rickmorty.model.Info
 import ru.nikita.rickmorty.model.Result
 import java.util.*
 import kotlin.collections.ArrayList
@@ -75,7 +71,6 @@ class Adapter(private var listResponse: ArrayList<Result>) :
         return listFilterResponse.size
     }
 
-
     interface OnCharacterClickListener {
         fun onCharacterClick(result: Result) {
 
@@ -114,4 +109,3 @@ class Adapter(private var listResponse: ArrayList<Result>) :
         }
     }
 }
-

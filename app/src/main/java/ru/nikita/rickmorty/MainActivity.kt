@@ -1,6 +1,5 @@
 package ru.nikita.rickmorty
 
-import android.content.res.Configuration
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -8,7 +7,6 @@ import androidx.fragment.app.FragmentTransaction
 import ru.nikita.rickmorty.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
-
 
     private lateinit var binding: ActivityMainBinding
 

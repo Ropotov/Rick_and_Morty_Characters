@@ -13,7 +13,4 @@ interface ApiService {
 
     @GET("character/{id}")
     suspend fun getDetailCharacter(@Path("id") id: Int): Response<DetailCharacter>
-
-    @GET("character/")
-    suspend fun getFilterCharacters(@Query("filter") filter: String): Response<Character>
 }

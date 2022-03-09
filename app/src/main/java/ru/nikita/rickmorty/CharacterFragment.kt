@@ -23,7 +23,6 @@ class CharacterFragment : Fragment() {
     lateinit var recyclerView: RecyclerView
     lateinit var adapter: Adapter
 
-
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -50,7 +49,6 @@ class CharacterFragment : Fragment() {
         })
         binding.svFilter.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                viewModel.getFilterCharacters(query)
                 return false
             }
 
@@ -88,5 +86,4 @@ class CharacterFragment : Fragment() {
         responseList.addAll(currentList)
         adapter.notifyDataSetChanged()
     }
-
 }

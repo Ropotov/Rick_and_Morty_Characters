@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
 import com.squareup.picasso.Picasso
 import ru.nikita.rickmorty.databinding.FragmentDetailBinding
@@ -45,8 +44,6 @@ class DetailFragment : Fragment() {
             val ma = (activity as MainActivity)
             ma.supportFragmentManager
                 .popBackStack()
-
-
         }
     }
 }

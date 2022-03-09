@@ -14,7 +14,4 @@ class Repository {
     suspend fun getDetailCharacter(): Response<DetailCharacter>{
         return RetrofitInstance.api.getDetailCharacter(idCharacter)
     }
-    suspend fun getFilteredCharacter(filter: String): Response<Character>{
-        return RetrofitInstance.api.getFilterCharacters(filter)
-    }
 }
